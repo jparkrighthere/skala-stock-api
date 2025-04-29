@@ -9,10 +9,7 @@ EXPOSE 8080
 EXPOSE 8081
 
 # 외부에서 받아들일 변수 선언
-ARG JAR_FILE
-
-# 애플리케이션의 jar 파일을 컨테이너에 추가
-ADD ${JAR_FILE} app.jar
+COPY target/skala-stock-api-0.0.1-SNAPSHOT.jar app/app.jar
 
 # 애플리케이션 실행
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=prod","-jar","app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
