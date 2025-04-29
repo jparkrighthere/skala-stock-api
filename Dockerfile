@@ -8,8 +8,7 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-# 외부에서 받아들일 변수 선언
-COPY target/skala-stock-api-0.0.1-SNAPSHOT.jar app/app.jar
-
+# 로컬에서 빌드된 jar 파일을 app.jar로 복사
+COPY target/*.jar app.jar
 # 애플리케이션 실행
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
