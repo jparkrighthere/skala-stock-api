@@ -44,21 +44,21 @@ spec:
         startupProbe:
           httpGet:
             path: /health/startup
-            port: 8080
+            port: 8081
           initialDelaySeconds: 30
           periodSeconds: 10
           failureThreshold: 30
         livenessProbe:
           httpGet:
             path: /health/liveness
-            port: 8080
+            port: 8081
           initialDelaySeconds: 30
           periodSeconds: 10
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /health/readiness
-            port: 8080
+            port: 8081
           initialDelaySeconds: 5
           periodSeconds: 10
           failureThreshold: 3
