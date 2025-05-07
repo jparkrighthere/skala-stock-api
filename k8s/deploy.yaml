@@ -1,118 +1,69 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: sk014-stock-api
-#   namespace: skala-practice
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: sk014-stock-api
-#   template:
-#     metadata:
-#       annotations:
-#         prometheus.io/scrape: 'true'
-#         prometheus.io/port: '8081'
-#         prometheus.io/path: '/actuator/prometheus'
-#         update: 09955f5d4ffbe64880115167c3af4b1f
-#       labels:
-#         app: sk014-stock-api
-#     spec:
-#       serviceAccountName: default
-#       affinity:
-#         nodeAffinity:
-#           requiredDuringSchedulingIgnoredDuringExecution:
-#             nodeSelectorTerms:
-#             - matchExpressions:
-#               - key: control-plane
-#                 operator: In
-#                 values:
-#                 - "amdp"
-#       containers:
-#       - name: stock-api
-#         image: amdp-registry.skala-ai.com/skala25a/sk014-stock-api:1.0.0
-#         imagePullPolicy: Always
-#         env:
-#         - name: LOGGING_LEVEL
-#           value: DEBUG
-#         - name: USER_NAME
-#           value: sk014
-#         - name: NAMESPACE
-#           value: skala-practice
-#         ports:
-#         - containerPort: 8080
-#         startupProbe:
-#           httpGet:
-#             path: /health/startup
-#             port: 8081
-#           initialDelaySeconds: 30
-#           periodSeconds: 10
-#           failureThreshold: 30
-#         livenessProbe:
-#           httpGet:
-#             path: /health/liveness
-#             port: 8081
-#           initialDelaySeconds: 30
-#           periodSeconds: 10
-#           failureThreshold: 3
-#         readinessProbe:
-#           httpGet:
-#             path: /health/readiness
-#             port: 8081
-#           initialDelaySeconds: 5
-#           periodSeconds: 10
-#           failureThreshold: 3
-#       tolerations:
-#       - effect: 
-#         key: control-plane
-#         operator: Equal
-#         value: "amdp"
-
-
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sk014-stock-api
   namespace: skala-practice
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: sk014-stock-api
   template:
     metadata:
-      annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/port: '8081'
-        prometheus.io/path: '/actuator/prometheus'
-        update: eb6bad62106bd7d3dfc3477f98bfa4fb
       labels:
         app: sk014-stock-api
     spec:
       serviceAccountName: default
       affinity:
-        nodeAffinity:
+        podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: control-plane
-                operator: In
-                values:
-                - "amdp"
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - sk014-stock-api
+              topologyKey: "kubernetes.io/hostname"
       containers:
-      - name: sk014-stock-api
-        image: amdp-registry.skala-ai.com/skala25a/sk014-stock-api:1.0.0
-        imagePullPolicy: Always
-        env:
-        - name: LOGGING_LEVEL
-          value: DEBUG
-        - name: USER_NAME
-          value: skala
-        - name: NAMESPACE
-          value: skala-practice
+        - name: sk014-stock-api
+          image: amdp-registry.skala-ai.com/skala25a/sk014-stock-api:1.0.0
+          imagePullPolicy: Always
+          env:
+            - name: LOGGING_LEVEL
+              value: DEBUG
+            - name: USER_NAME
+              value: skala
+            - name: NAMESPACE
+              value: skala-practice
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              cpu: "500m"
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
       tolerations:
-      - effect: 
-        key: control-plane
-        operator: Equal
-        value: "amdp"
+        - key: "control-plane"
+          operator: "Equal"
+          value: "amdp"
+          effect: "NoSchedule"
