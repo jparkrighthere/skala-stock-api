@@ -3,7 +3,7 @@ server:
 
 springdoc:
   swagger-ui:
-    path: /swagger/swagger-ui # Swagger UI 접속 경로 변경
+    path: /swagger/swagger-ui
   api-docs:
     path: /swagger/swagger-docs
 
@@ -13,8 +13,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"  # 모든 엔드포인트 노출
-      base-path: /health  # actuator base 경로를 /health로 설정
+        include: "*"  # 모든 actuator 엔드포인트 노출
   endpoint:
     health:
       probes:
@@ -56,6 +55,7 @@ spring:
 
 application:
   name: "SKALA-STOCK-API"
+
 skala:
   user-name: ${USER_NAME:skala}
   namespace: ${NAMESPACE:skala-env}
