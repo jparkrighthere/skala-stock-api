@@ -8,15 +8,15 @@
     {
       "name": "application.health",
       "type": "com.sk.skala.stockapi.config.ApplicationProperties$Health",
-      "sourceType": "com.sk.skala.stockapi.config.ApplicationProperties",
-      "sourceMethod": "public com.sk.skala.stockapi.config.ApplicationProperties.Health getHealth() "
+      "sourceType": "com.sk.skala.stockapi.config.ApplicationProperties"
     }
   ],
   "properties": [
     {
       "name": "application.health.timeout",
       "type": "java.lang.Long",
-      "sourceType": "com.sk.skala.stockapi.config.ApplicationProperties$Health"
+      "sourceType": "com.sk.skala.stockapi.config.ApplicationProperties$Health",
+      "defaultValue": 0
     },
     {
       "name": "application.health.url",
