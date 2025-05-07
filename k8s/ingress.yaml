@@ -10,16 +10,17 @@ metadata:
 spec:
   ingressClassName: public-nginx
   rules:
-  - host: sk014-skala-stock-api.skala25a.project.skala-ai.com
-    http:
-      paths:  
-      - path: /
-        pathType: Prefix
-        backend:
-            name: sk014-stock-api
-            port:
-              number: 8080
+    - host: sk014-skala-stock-api.skala25a.project.skala-ai.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sk014-stock-api
+                port:
+                  number: 8080
   tls:
-  - hosts:
-    - '*.skala25a.project.skala-ai.com'
-    secretName: skala25-project-tls-cert
+    - hosts:
+        - '*.skala25a.project.skala-ai.com'
+      secretName: skala25-project-tls-cert
