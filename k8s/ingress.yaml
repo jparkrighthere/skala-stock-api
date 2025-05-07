@@ -10,35 +10,14 @@ metadata:
 spec:
   ingressClassName: public-nginx
   rules:
-  - host: springboot.skala25a.project.skala-ai.com
+  - host: sk014-skala-stock-api.skala25a.project.skala-ai.com
     http:
-      paths:
-      - path: /stock/api/(.*)
-        pathType: ImplementationSpecific
+      paths:  
+      - path: /
+        pathType: Prefix
         backend:
           service:
             name: sk014-stock-api
-            port:
-              number: 8080
-      - path: /stock/actuator/(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: sk014-stock-api
-            port:
-              number: 8081
-      - path: /stock/swagger/(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: sk014-stock-api
-            port:
-              number: 8080
-      - path: /stock/(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: sk014-stock-ui
             port:
               number: 8080
   tls:
