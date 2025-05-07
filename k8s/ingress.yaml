@@ -3,8 +3,8 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-  name: skala-stock-api
-  namespace: skala-edu
+  name: sk014-stock-api
+  namespace: skala-practice
 spec:
   ingressClassName: public-nginx
   rules:
